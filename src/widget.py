@@ -1,4 +1,5 @@
 def mask_account_card(bank_prod):
+    """Функция маскировки номера и счета в банке"""
     if "Счет" in bank_prod:
         return f"Счет **{(bank_prod[-4:])}"
     else:
@@ -15,5 +16,15 @@ def mask_account_card(bank_prod):
 
 
 
-def get_date():
-    pass
+def get_date(data):
+    """Функция которая принимает на вход строку с датой и возвращает её в правильном формате """
+    return f"{data[8:10]}.{data[5:7]}.{data[:4]}"
+
+
+"""Проверка функций"""
+num_c = mask_account_card("Visa Platinum 8990922113665229")
+bank_account = mask_account_card("Счет 73654108430135874305")
+print(num_c)
+print(bank_account)
+data_ = get_date("2024-05-11T02:26:18.671407")
+print(data_)
