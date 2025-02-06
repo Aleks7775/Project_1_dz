@@ -1,21 +1,21 @@
 from typing import Dict, List
 
 
-def filter_by_state(last_dict: List[Dict], value_key: str = 'EXECUTED') -> List[Dict]:
+def filter_by_state(list_dict: List[Dict], value_key: str = 'EXECUTED') -> List[Dict]:
     """функция которая принимает список словарей и опционально значение для ключа
 (state) и возвращает новый список словарей, содержащий только те словари, у которых ключ
 (state) соответствует указанному значению"""
     new_list = []
-    for i in last_dict:
-        if i['state'] == value_key:
-            new_list.append(i)
+    for dictionary in list_dict:
+        if dictionary['state'] == value_key:
+            new_list.append(dictionary)
     return new_list
 
 
 def sort_by_date(list_dict: List[Dict], sort_key: bool = True) -> List[Dict]:
     """функция которая принимает список словарей и необязательный параметр, задающий порядок
     сортировки (по умолчанию — убывание) и возвращает новый список, отсортированный по дате (date)"""
-    sort_list = sorted(list_dict, key=lambda x: x['date'], reverse=sort_key)
+    sort_list = sorted(list_dict, key=lambda every_dict: every_dict['date'], reverse=not sort_key)
     return sort_list
 
 
