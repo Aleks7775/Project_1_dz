@@ -18,6 +18,7 @@ cd ваш_проект
 ```
 pip install -r requirements.txt
 
+poetry add --group dev pytest
 ```
 
 
@@ -37,5 +38,8 @@ Visa Platinum 8990922113665229
 Счет **4305
 
 Visa Platinum  8990 92** **** 5229
+
+## Тестирование 
+Проект покрыт тестами. Для их запуска выполните команду ```poetry run pytest --cov```
 
 
