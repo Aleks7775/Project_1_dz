@@ -1,4 +1,4 @@
-from typing import List, Dict, Iterator, Any
+from typing import Any, Dict, Iterator, List, Optional, Union
 
 transactions = [
         {
@@ -78,41 +78,30 @@ transactions = [
         }
     ]
 
-
-def filter_by_currency(list_of_dict: List[Dict], input_currency: str) -> Iterator[Dict]:
+def filter_by_currency(list_of_dict: List[Dict], input_currency: Optional[str] = None) -> Iterator[Union[Dict, str]]:
+    """Функция принимает на вход список транзакций и возвращает итератор,
+     который поочередно выдает транзакции, где валюта операции соответствует заданной (например, USD)"""
     for item in list_of_dict:
+        if input_currency not in ["USD", "RUB"]:
+            yield "Не выбрана валюта"
         if item["operationAmount"]["currency"]["code"] == input_currency:
             yield item
 
 
-
-
-#transaction = filter_by_currency(transactions, "USD")
-#print(next(transactions))
-#print(next(transactions))
-#print(next(transactions))
-
-def transaction_descriptions(transaction: List[Dict[str, Any]]) -> Iterator[str]:
-    for item in transactions:
+def transaction_descriptions(transaction: List[Dict[str, Any]] = None) -> Iterator[str]:
+    """Функция принимает список словарей с транзакциями и возвращает описание каждой операции по очереди"""
+    if not transaction:
+        yield "Транзакции отсутствуют"
+    for item in transaction:
         yield item["description"]
 
-#operation = transaction_descriptions(transactions)
-#print(next(operation))
-#print(next(operation))
-#print(next(operation))
 
-
-def card_number_generator(start: int, stop: int) -> str:
+def card_number_generator(start: int, stop: int) -> Iterator[str]:
+    """Функция, генератор который выдает номера банковских карт в формате
+    XXXX XXXX XXXX XXXX, где X — цифра номера карты и возвращает в формате
+    от 0000 0000 0000 0001 до 9999 9999 9999 9999 в заданном диапазоне"""
     for number in range(start, stop):
         card = str(number)
         if len(card) < 16:
             card = "0" * (16 - len(card)) + card
             yield f"{card[:4]} {card[4:8]} {card[8:12]} {card[12:]}"
-
-
-#card_number = card_number_generator(99999, 999999)
-#print(next(card_number))
-#print(next(card_number))
-#print(next(card_number))
-
-
