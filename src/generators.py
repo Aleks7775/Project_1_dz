@@ -1,38 +1,6 @@
-import pytest
+from typing import Any, Dict, Iterator, List, Optional, Union
 
-
-@pytest.fixture
-def bank_product() -> list:
-    return ['num', '12345', '', {}, [], 1]
-
-
-@pytest.fixture()
-def data_get_format() -> list:
-    return ["0", '12.12.12.', '', {}, []]
-
-
-@pytest.fixture()
-def filter_state_executed() -> list:
-    return [{'id': 41428829, 'state': 'EXECUTED', 'date': '2019-07-03T18:35:29.512364'},
-           {'id': 939719570, 'state': 'EXECUTED', 'date': '2018-06-30T02:08:58.425572'}]
-
-
-@pytest.fixture()
-def state_zero() -> str:
-    return "Отсутствует ключ state"
-
-
-@pytest.fixture()
-def sort_date() -> list:
-    return [{"id": 41428829, "state": "EXECUTED", "date": "2019-07-03T18:35:29.512364"},
-           {"id": 939719570, "state": "EXECUTED", "date": "2020-06-30T02:08:58.425572"},
-           {"id": 594226727, "state": "CANCELED", "date": "2018-09-12T21:27:25.241689"},
-           {"id": 615064591, "state": "CANCELED", "date": "2018-10-14T08:21:33.419441"}]
-
-
-@pytest.fixture()
-def input_transactions() -> list:
-    return  [
+transactions = [
         {
             "id": 939719570,
             "state": "EXECUTED",
@@ -110,4 +78,30 @@ def input_transactions() -> list:
         }
     ]
 
+def filter_by_currency(list_of_dict: List[Dict], input_currency: Optional[str] = None) -> Iterator[Union[Dict, str]]:
+    """Функция принимает на вход список транзакций и возвращает итератор,
+     который поочередно выдает транзакции, где валюта операции соответствует заданной (например, USD)"""
+    for item in list_of_dict:
+        if input_currency not in ["USD", "RUB"]:
+            yield "Не выбрана валюта"
+        if item["operationAmount"]["currency"]["code"] == input_currency:
+            yield item
 
+
+def transaction_descriptions(transaction: List[Dict[str, Any]] = None) -> Iterator[str]:
+    """Функция принимает список словарей с транзакциями и возвращает описание каждой операции по очереди"""
+    if not transaction:
+        yield "Транзакции отсутствуют"
+    for item in transaction:
+        yield item["description"]
+
+
+def card_number_generator(start: int, stop: int) -> Iterator[str]:
+    """Функция, генератор который выдает номера банковских карт в формате
+    XXXX XXXX XXXX XXXX, где X — цифра номера карты и возвращает в формате
+    от 0000 0000 0000 0001 до 9999 9999 9999 9999 в заданном диапазоне"""
+    for number in range(start, stop):
+        card = str(number)
+        if len(card) < 16:
+            card = "0" * (16 - len(card)) + card
+            yield f"{card[:4]} {card[4:8]} {card[8:12]} {card[12:]}"
