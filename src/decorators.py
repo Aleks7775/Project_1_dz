@@ -25,7 +25,7 @@ def log(filename=None):
     return decorator
 
 
-@log
-def log_func(x, y):
+@log()
+def log_func(a, b):
     """Проверка декоратора"""
-    return x + y
+    return a + b
