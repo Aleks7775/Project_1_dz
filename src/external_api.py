@@ -16,7 +16,7 @@ def convert_in_rub(transaction):
     (amount) в рублях, тип данных —float. Если транзакция была в USD
     или EUR, происходит обращение к внешнему API для получения
     текущего курса валют и конвертации суммы операции в рубли"""
-    headers = {"apikey": "API_KEY"}
+    headers = {"apikey": API_KEY}
     amount = transaction['operationAmount']['amount']
     code = transaction['operationAmount']['currency']['code']
     to = "RUB"
