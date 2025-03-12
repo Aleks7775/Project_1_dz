@@ -7,16 +7,18 @@ def csv_file(file):
     try:
         with open(file) as f:
             reader = csv.DictReader(f, delimiter=';')
+            rows = []
             for row in reader:
-                print(row)
+                rows.append(row)
+            return rows
     except FileNotFoundError:
-        print("отсутствует файл")
+        return "отсутствует файл"
 
 
 def xlsx_file(file):
     """Cчитывает финансовые операции из XLSX-файлов"""
     try:
         pd_xlsx = pd.read_excel(file)
-        print(pd_xlsx)
+        return pd_xlsx
     except FileNotFoundError:
-        print("отсутствует файл")
+        return "отсутствует файл"
