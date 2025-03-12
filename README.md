@@ -19,6 +19,10 @@ cd ваш_проект
 pip install -r requirements.txt
 
 poetry add --group dev pytest
+
+poetry add pandas
+
+poetry add openpyxl
 ```
 
 
@@ -65,3 +69,5 @@ Visa Platinum  8990 92** **** 5229
 Ожидаемый вывод при ошибке:
 
 my_function error: (тип ошибки) - заменяется на текст ошибки.
+
+## Созданы функции для считывания финансовых операций из CSV и xlsx файлов в формате словарей
