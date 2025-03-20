@@ -19,6 +19,6 @@ def mask_account_card(bank_prod: Union[str]) -> str:
 
 def get_date(data: Union[str]) -> str:
     """Функция которая принимает на вход строку с датой и возвращает её в правильном формате """
-    if len(data) == 26:
+    if len(data) == 20 or 26:
         return f"{data[8:10]}.{data[5:7]}.{data[:4]}"
     return "Некорректный формат даты"
