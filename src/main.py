@@ -1,3 +1,4 @@
+import os
 import re
 
 from src.bank_operation import search_operation
@@ -5,6 +6,11 @@ from src.fin_tranzaction import csv_file, xlsx_file
 from src.processing import sort_by_date
 from src.utils import json_file
 from src.widget import get_date, mask_account_card
+
+file = os.path.dirname(os.path.abspath(__file__))
+file_operations_json = os.path.join(file, '..', 'data', 'operations.json')
+file_operations_csv = os.path.join(file, '..', 'data', 'transactions.csv')
+file_operations_xlsx = os.path.join(file, '..', 'data', 'transactions_excel.xlsx')
 
 
 def currency_file(transactions, input_currency="RUB"):
@@ -39,13 +45,13 @@ def main():
 
     user = input()
     if user == '1':
-        transaction = json_file("/home/aleksandr/PycharmProjects/PythonProject2/data/operations.json")
+        transaction = json_file(file_operations_json)
         print("Для обработки выбран JSON-файл.")
     elif user == '2':
-        transaction = csv_file("/home/aleksandr/PycharmProjects/PythonProject2/data/transactions.csv")
+        transaction = csv_file(file_operations_csv)
         print("Для обработки выбран CSV-файл.")
     elif user == '3':
-        transaction = xlsx_file("/home/aleksandr/PycharmProjects/PythonProject2/data/transactions_excel.xlsx")
+        transaction = xlsx_file(file_operations_xlsx)
         print("Для обработки выбран XLSX-файл.")
 
     print("Введите статус, по которому необходимо выполнить фильтрацию.\n"      
