@@ -7,22 +7,16 @@ from src.utils import json_file
 from src.widget import get_date, mask_account_card
 
 
-def currency_js(transactions, input_currency):
-    """функция для фильтрации валюты json файлов"""
+def currency_file(transactions, input_currency="RUB"):
+    """функция для фильтрации валюты json, csv и xlsx файлов"""
     currency = []
     for key in transactions:
-        if key.get('operationAmount'):
+        if "operationAmount" in key:
             if key["operationAmount"]["currency"]["code"] == input_currency:
                 currency.append(key)
-    return currency
-
-
-def currency_csv_xlsx(transactions, input_currency):
-    """функция для фильтрации валюты csv и xlsx файлов"""
-    currency = []
-    for key in transactions:
-        if key["currency_code"] == input_currency:
-            currency.append(key)
+        elif "currency_name" in key:
+            if key["currency_code"] == input_currency:
+                currency.append(key)
     return currency
 
 
@@ -74,38 +68,53 @@ def main():
         by_word = input("Отфильтровать список транзакций по определенному слову в описании? Да/Нет").lower()
         if sorted_bool == "по убыванию":
             if currency_transactions == "да":
-                    if user == "1":
-                        operation_js = currency_js(sort_by_yes_false, "RUB")
-                        if by_word == "да":
-                            keyword = input("Введите слово для фильтрации")
-                            return filter_by_word(operation_js, keyword)
-                        return  operation_js
-                    elif user in ("2", "3"):
-                        operation_cs_xl = currency_csv_xlsx(sort_by_yes_false, "RUB")
-                        if by_word == "да":
-                            keyword = input("Введите слово для фильтрации")
-                            return filter_by_word(operation_cs_xl, keyword)
-                        return operation_cs_xl
+                currency_ = currency_file(sort_by_yes_false)
+                if by_word == "да":
+                    keyword = input("Введите слово для фильтрации")
+                    filtered_word = filter_by_word(currency_, keyword)
+                    return filtered_word
+                return currency_
+            elif currency_transactions == "нет":
+                if by_word == "да":
+                    keyword = input("Введите слово для фильтрации")
+                    not_ruble_word = filter_by_word(sort_by_yes_false, keyword)
+                    return not_ruble_word
             return sort_by_yes_false
-        elif "по возрастанию":
+        elif sorted_bool == "по возрастанию":
             if currency_transactions == "да":
-                    if user == "1":
-                        operation_js_age = currency_js(sort_by_yes, "RUB")
-                        if by_word == "да":
-                            keyword = input("Введите слово для фильтрации")
-                            return filter_by_word(operation_js_age, keyword)
-                        return operation_js_age
-                    elif user in ("2", "3"):
-                        operation_cs_age = currency_csv_xlsx(sort_by_yes, "RUB")
-                        if by_word == "да":
-                            keyword = input("Введите слово для фильтрации")
-                            return filter_by_word(operation_cs_age, keyword)
-                        return operation_cs_age
+                sorting_ruble = currency_file(sort_by_yes)
+                if by_word == "да":
+                    keyword = input("Введите слово для фильтрации")
+                    filtration_ruble = filter_by_word(sorting_ruble, keyword)
+                    return filtration_ruble
+                return sorting_ruble
+            elif currency_transactions == "нет":
+                if by_word == "да":
+                    keyword = input("Введите слово для фильтрации")
+                    filtration_no_ruble = filter_by_word(sort_by_yes, keyword)
+                    return filtration_no_ruble
             return sort_by_yes
+    elif  sorted_operation == "нет":
+        currency_transactions = input("Выводить только рублевые тразакции? Да/Нет").lower()
+        by_word = input("Отфильтровать список транзакций по определенному слову в описании? Да/Нет").lower()
+        if currency_transactions == "да":
+            no_filtration_ruble = currency_file(filter_by_status)
+            if by_word == "да":
+                keyword = input("Введите слово для фильтрации")
+                ruble_and_filtration = filter_by_word(no_filtration_ruble, keyword)
+                return ruble_and_filtration
+            return no_filtration_ruble
+        elif currency_transactions == "нет":
+            if by_word == "да":
+                keyword = input("Введите слово для фильтрации")
+                no_ruble_filtration = filter_by_word(filter_by_status, keyword)
+                return no_ruble_filtration
+        return filter_by_status
 
 
 function = main()
 
+print("Распечатываю итоговый список транзакций...")
 print(f"\nВсего банковских операций в выборке: {len(function)}\n")
 for i in function:
     if isinstance(i["date"], str) and (len(i["date"]) == 20 or len(i["date"]) == 26):

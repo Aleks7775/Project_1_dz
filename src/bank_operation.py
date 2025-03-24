@@ -19,12 +19,9 @@ def search_operation(list_dict, string):
     return filter_transactions
 
 
-def category_operations(list_dict, description=[]):
+def category_operations(list_dict, description):
     """ Функция принимает список транзакций и список категорий, а возвращает словарь
-    с количеством операций в каждой категории."""
-    operation = [transaction['description'] for transaction in list_dict]
+         с количеством операций в каждой категории."""
+    operation = [transaction['description'] for transaction in list_dict if transaction.get('description') in description]
     cnt = Counter(operation)
-    result = {}
-    for i in description:
-        result[i] = cnt[i]
-    return result
+    return dict(cnt)
