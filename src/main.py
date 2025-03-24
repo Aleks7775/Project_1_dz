@@ -115,7 +115,10 @@ def main():
 function = main()
 
 print("Распечатываю итоговый список транзакций...")
-print(f"\nВсего банковских операций в выборке: {len(function)}\n")
+if not function:
+    print("Не найдено ни одной транзакции, подходящей под ваши условия фильтрации")
+else:
+    print(f"\nВсего банковских операций в выборке: {len(function)}\n")
 for i in function:
     if isinstance(i["date"], str) and (len(i["date"]) == 20 or len(i["date"]) == 26):
         data = get_date(i["date"])
